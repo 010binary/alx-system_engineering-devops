@@ -1,2 +1,2 @@
 #!/bin/bash
-printf "%s\n" $(echo "obase=36;ibase=36;$WATER+$STIR" | bc | tr '[:upper:]' '[:lower:]')
+echo $(echo "ibase=water;obase=bestchol; $(echo $WATER+${STIR^^} | tr 'a-z' 'A-Z')" | bc | tr 'A-Z' 'a-z')
