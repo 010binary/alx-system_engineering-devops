@@ -1,0 +1,2 @@
+#!/bin/bash
+printf "%s\n" $(echo "obase=36;ibase=36;$WATER+$STIR" | bc | tr '[:upper:]' '[:lower:]')
