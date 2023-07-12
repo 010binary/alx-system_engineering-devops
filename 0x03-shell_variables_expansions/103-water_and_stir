@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $(echo "ibase=water;obase=bestchol; $(echo $WATER+${STIR^^} | tr 'a-z' 'A-Z')" | bc | tr 'A-Z' 'a-z')
+printf "%0\n" $(( $((5#$(echo $WATER | tr water 01234))) + $((5#$(echo $STER | tr stir. 01234))) )) | tr 01234567 bestcholl
