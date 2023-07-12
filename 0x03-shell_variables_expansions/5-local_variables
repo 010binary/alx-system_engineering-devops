@@ -1,2 +1,2 @@
 #!/bin/bash
-set | grep -E '^[[:alnum:]_]+=[^=]+$'; declare -f
+compgen -A variable -A function | sort
