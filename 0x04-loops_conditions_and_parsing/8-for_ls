@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#Grabs the content of the current woring dir and prints
+
+list=$(ls)
+
+for i in $list; do
+
+  echo "$i" | cut -d '-' -f2
+
+done
