@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#he exact format must be:
+#OCCURENCE_NUMBER IP HTTP_CODE
+#In list format
+#Ordered from the greatest to the lowest number of occurrences
+
+file="apache-access.log"
+awk '{print $1, $9}' $file | sort | uniq -c | sort -nr
