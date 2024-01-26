@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#Show the PID with out the ps command 
+
+pgrep -l bash
