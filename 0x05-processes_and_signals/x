@@ -11,7 +11,7 @@ fi
 filename="$1"
 
 # Create the file
-touch "$filename"
+echo "#!/usr/bin/env bash" > "$filename"
 
 # Set user execute permission
 chmod u+x "$filename"
