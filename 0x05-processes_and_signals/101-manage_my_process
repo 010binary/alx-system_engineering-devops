@@ -1,45 +1,46 @@
 #!/usr/bin/env bash
-#Fuction for the task I used a switch statment
+#part 2
 
-pid_file="/var/run/my_process.pid"
+if [ "${1}" == "start" ]
 
-start() {
+then
+
     ./manage_my_process &
-    echo $! > "$pid_file"
-}
 
-stop() {
-        pid=$(cat "$pid_file")
-        kill "$pid"
-        rm "$pid_file"
-}
+    touch /var/run/my_process.pid
 
-restart() {
-    stop
-    start
-}
+    echo "$!" > /var/run/my_process.pid
 
-usage() {
-    echo "Usage: $0 {start|stop|restart}"
-    exit 1
-}
+    echo "manage_my_process started"
 
-case "$1" in
-    start)
-        start
-        echo "manage_my_process started"
-        ;;
-    stop)
-        stop
-        echo "manage_my_process stopped"
-        ;;
-    restart)
-        restart
-        echo "manage_my_process restarted"
-        ;;
-    *)
-        usage
-        ;;
-esac
+elif [ "${1}" == "stop" ]
 
-exit 0
+then
+
+    echo "manage_my_process stopped"
+
+    kill "$(cat /var/run/my_process.pid)"
+
+    rm /var/run/my_process.pid
+
+elif [ "${1}" == "restart" ]
+
+then
+
+    kill "$(cat /var/run/my_process.pid)"
+
+    rm /var/run/my_process.pid
+
+    ./manage_my_process &
+
+    touch /var/run/my_process.pid
+
+    echo "$!" > /var/run/my_process.pid
+
+    echo "manage_my_process restarted"
+
+else
+
+    echo "Usage: manage_my_process {start|stop|restart}"
+
+fi
