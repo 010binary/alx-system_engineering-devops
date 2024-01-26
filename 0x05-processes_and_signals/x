@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Bash script to create a file and set user execute permission
+
+if [ $# -eq 0 ]; then
+    echo "Error: Filename is required."
+    echo "Usage: $0 filename"
+    exit 1
+fi
+
+filename="$1"
+
+# Create the file
+touch "$filename"
+
+# Set user execute permission
+chmod u+x "$filename"
+

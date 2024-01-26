@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Bash script to add, commit, and push changes in a Git repository
+# Usage: ./z "Your commit message"
+
+if [ $# -eq 0 ]; then
+    echo "Error: Commit message is required."
+    echo "Usage: $0 \"the commit message\""
+    exit 1
+fi
+
+commit_message="$1"
+
+# Add all changes, commit, and push
+git add . && git commit -m "$commit_message" && git push
