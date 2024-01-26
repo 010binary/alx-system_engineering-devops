@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#You are not invicibly now LOL
+
+pkill -f -SIGKILL 7-highlander
