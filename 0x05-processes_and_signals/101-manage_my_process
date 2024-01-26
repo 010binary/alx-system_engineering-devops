@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#Fuction for the task I used a switch statment
+
+pid_file="/var/run/my_process.pid"
+script_path="./manage_my_process"
+
+start() {
+    $script_path > /dev/null 2>&1 &
+    echo $! > "$pid_file"
+}
+
+stop() {
+        pid=$(cat "$pid_file")
+        kill "$pid"
+        rm -f "$pid_file"
+}
+
+restart() {
+    stop
+    start
+}
+
+usage() {
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+}
+
+case "$1" in
+    start)
+        start
+        echo "manage_my_process started"
+        ;;
+    stop)
+        stop
+        echo "manage_my_process stopped"
+        ;;
+    restart)
+        restart
+        echo "manage_my_process restarted"
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+exit 0
