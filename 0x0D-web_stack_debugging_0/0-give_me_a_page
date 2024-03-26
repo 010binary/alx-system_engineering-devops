@@ -2,4 +2,4 @@
 # fixing my apache
 
 # echo "ServerName localhost" >> /etc/apache2.conf
-sudo service apache2 start
+service apache2 start
