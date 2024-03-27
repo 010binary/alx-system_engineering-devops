@@ -2,8 +2,8 @@
 # Installs Nginx server
 
 # Update package repositories and install Nginx
-sudo apt-get update
-sudo apt-get -y install nginx
+apt-get update
+apt-get -y install nginx
 
 # Configure firewall to allow Nginx HTTP traffic
 ufw allow 'Nginx HTTP'
@@ -12,4 +12,4 @@ ufw allow 'Nginx HTTP'
 echo "Hello World!" > /var/www/html/index.html
 
 # Start Nginx service
-sudo service nginx restart
+service nginx restart
