@@ -1,3 +1,5 @@
+# Setup New Ubuntu server with nginx using puppet scripts
+
 exec { 'update system':
         command => '/usr/bin/apt-get update',
 }
