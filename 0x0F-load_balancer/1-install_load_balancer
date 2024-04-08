@@ -34,11 +34,11 @@ defaults
   timeout server 15s
   timeout http-request 10s
 
-frontend clickviral-tech-frontend
+frontend augustineemeka-tech-frontend
     bind *:80
-    default_backend clickviral-tech-backend
+    default_backend augustineemeka-tech-backend
 
-backend clickviral-tech-backend
+backend augustineemeka-tech-backend
     balance roundrobin
     server 488939-web-01 54.90.0.247:80 check
     server 488939-web-02 54.160.86.47:80 check
