@@ -1,28 +1,16 @@
 #!/usr/bin/env bash
 # Let’s also add other subdomains to make our life easier, and write a Bash script that will display information about subdomains.
 
-func () {
-    if [ "$#" -lt 1 ]
-    then
-        exit 0
-    elif [ "$#" -eq 2 ]
-    then
-        domain=$2.$1
-        name=$(dig $domain | grep -A1 'ANSWER SECTION:' | awk -F. 'NR==2 {print $1}')
-        record=$(dig $domain  | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $4}')
-        ip=$(dig $domain  | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $5}')
-        echo "The subdomain $name is a $record record and points to $ip"
-    else
-        declare -a arr=("www" "lb-01" "web-01" "web-02")
-        for i in "${arr[@]}"
-        do
-            domain=$i.$1
-            name=$(dig $domain | grep -A1 'ANSWER SECTION:' | awk -F. 'NR==2 {print $1}')
-            record=$(dig $domain  | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $4}')
-            ip=$(dig $domain  | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $5}')
-            echo "The subdomain $name is a $record record and points to $ip"
-        done
-    fi  
+print_domain_subdomain () {
+    dig "$1" | grep -A1 'ANSWER SECTION:' | sed -r "s/$1./$2/g" | awk -F" " ' NR==2 { print "The subdomain " $1 " is a " $4 " record and points to " $5 }'
 }
 
-func $1 $2
+if [ "$#" -eq 2 ]
+then
+    print_domain_subdomain "$2.$1" "$2"
+else
+    print_domain_subdomain "www.$1" "www"
+    print_domain_subdomain "lb-01.$1" "lb-01"
+    print_domain_subdomain "web-01.$1" "web-01"
+    print_domain_subdomain "web-02.$1" "web-02"
+fi
