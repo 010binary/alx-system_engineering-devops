@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
-# install load balancer  # Corrected for Unix-style line endings by Austine
+# Bash script to configure HAProxy on a new Ubuntu machine
 
-echo -e "Updating and doing some minor checks...\n"
-
-function install() {
-    command -v "$1" &> /dev/null
-    if [ $? -ne 0 ]; then
-        echo -e "       Installing: $1\n"
+# Function to install packages
+function install_package() {
+    package_name=$1
+    if ! dpkg -l | grep -q $package_name; then
+        echo "Installing $package_name..."
         sudo apt-get update -y -qq && \
-        sudo apt-get install -y "$1" -qq
-        echo -e "\n"
+        sudo apt-get install -y $package_name -qq
     else
-        echo -e "       ${1} is already installed.\n"
+        echo "$package_name is already installed."
     fi
 }
 
-install haproxy
+# Install HAProxy
+install_package haproxy
 
-echo -e "\nSetting up some minor stuff.\n"
+# Backup default HAProxy configuration
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
 
-sudo cp /etc/haproxy/haproxy.cfg haproxy_default.backup
-
-server_config="
+# Configure HAProxy
+cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
 defaults
     mode http
     timeout client 15s
@@ -35,18 +34,14 @@ frontend augustineemeka-tech-frontend
 
 backend augustineemeka-tech-backend
     balance roundrobin
-    server 488939-web-01 54.90.0.247:80 check
-    server 488939-web-02 54.160.86.47:80 check
-"
+    server 488939-web-01 <IP_of_web_01>:80 check
+    server 488939-web-02 <IP_of_web_02>:80 check
+EOF
 
-echo "$server_config" | sudo dd status=none of=/etc/haproxy/haproxy.cfg
+# Enable HAProxy to be started by init script
+echo "ENABLED=1" | sudo tee /etc/default/haproxy > /dev/null
 
-echo "ENABLED=1" | sudo dd status=none of=/etc/default/haproxy
+# Restart HAProxy service
+sudo service haproxy restart
 
-echo "configured - Roundrobin On web-01 & web-02"
-
-if [ "$(pgrep -c haproxy)" -le 0 ]; then
-    sudo service haproxy start
-else
-    sudo service haproxy restart
-fi
+echo "HAProxy configured successfully!"
