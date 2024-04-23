@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """convert res data to json"""
-import csv
 import json
 import requests
 import sys
