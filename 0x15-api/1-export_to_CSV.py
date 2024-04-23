@@ -1,20 +1,17 @@
 #!/usr/bin/python3
 """ Export api response to comma seperated value file (csv)"""
 import csv
-import requests
+import requests as r
 import sys
 
-if __name__ == '__main__':
-    user = sys.argv[1]
-    url_user = 'https://jsonplaceholder.typicode.com/users/' + user
-    res = requests.get(url_user)
-    user_name = res.json().get('username')
-    task = url_user + '/todos'
-    tasks_response = requests.get(task)
-    tasks_data = tasks_response.json()
+if __name__ == "__main__":
+    user_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    usr = r.get(url + "users/{}".format(user_id)).json()
+    username = usr.get("username")
+    to_do = r.get(url + "todos", params={"userId": user_id}).json()
 
-    with open('{}.csv'.format(user), 'w') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(['user', 'Username', 'Completed', 'Title'])
-        for task in tasks_data:
-            csv_writer.writerow([user, user_name, task['completed'], task['title']])
+    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        [writer.writerow([user_id, username, elm.get("completed"),
+                          elm.get("title")]) for elm in to_do]
