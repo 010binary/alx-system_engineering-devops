@@ -29,6 +29,6 @@ if __name__ == '__main__':
                 "completed": TASK_COMPLETED_STATUS,
                 "username": USERNAME
             })
-    
+
     with open('todo_all_employees.json', 'w') as f:
         json.dump(users_dict, f)
