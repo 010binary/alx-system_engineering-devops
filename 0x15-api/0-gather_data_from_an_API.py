@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Accessing a REST API for todo lists of employees using urllib or requests module"""
+"""Accessing a REST API for todo lists of employees using 
+urllib or requests module"""
 
 import re
 import requests
