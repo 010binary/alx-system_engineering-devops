@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Accessing a REST API for todo lists of employees using 
+"""Accessing a REST API for todo lists of employees using
 urllib or requests module"""
 
 import requests
@@ -7,7 +7,7 @@ import sys
 
 
 def main():
-    """Accessing a REST API for todo lists of employees using 
+    """Accessing a REST API for todo lists of employees using
     urllib or requests module"""
     
     complete = 0
