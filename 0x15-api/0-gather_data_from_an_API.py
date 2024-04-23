@@ -3,40 +3,27 @@
 urllib or requests module"""
 
 import requests
-import sys
-
-
-def main():
-    """Accessing a REST API for todo lists of employees using
-    urllib or requests module"""
-
-    complete = 0
-    total = 0
-    args = int(sys.argv[1])
-    userUrl = requests.get("https://jsonplaceholder.typicode.com/users")
-    todoUrl = requests.get("https://jsonplaceholder.typicode.com/todos")
-
-    userUrl.json()
-    for user in userUrl.json():
-        if user["id"] == args:
-            name = user["name"]
-
-    for todo in todoUrl.json():
-        if todo["userId"] == args:
-            if todo["completed"] is True:
-                complete += 1
-
-    for todo in todoUrl.json():
-        if todo["userId"] == args:
-            if todo["completed"] is True or todo["completed"] is False:
-                total += 1
-
-    print(f"Employee {name} is done with tasks({complete}/{total}):")
-    for todo in todoUrl.json():
-        if todo["userId"] == args:
-            if todo["completed"] is True:
-                print(f"\t{todo['title']}")
+from sys import argv
 
 
 if __name__ == "__main__":
-    main()
+    if len(argv) > 1:
+        userId = int(argv[1])
+        url = "https://jsonplaceholder.typicode.com/users/"
+        r = requests.get("{}/{}".format(url, userId))
+        data = r.json()
+        name = r.json().get("name")
+        if name is not None:
+            userTodos = requests.get("{}{}/todos".format(url, userId))
+            userTodos = userTodos.json()
+            taskNumber = len(userTodos)
+            completedTasks = []
+            for task in userTodos:
+                if task.get("completed") is True:
+                    completedTasks.append(task)
+            taskCompletedNumber = len(completedTasks)
+            print("Employee {} is done with tasks({}/{}):"
+                  .format(name, taskCompletedNumber, taskNumber))
+            for task in completedTasks:
+                title = task.get("title")
+                print("\t {}".format(title))
