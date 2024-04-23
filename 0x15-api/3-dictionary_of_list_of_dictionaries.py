@@ -1,34 +1,20 @@
 #!/usr/bin/python3
 """convert res to dict of list of dict"""
-
 import json
 import requests
 
-
-if __name__ == '__main__':
-    url = "https://jsonplaceholder.typicode.com/users"
-
-    resp = requests.get(url)
-    Users = resp.json()
-
-    users_dict = {}
-    for user in Users:
-        USER_ID = user.get('id')
-        USERNAME = user.get('username')
-        url = 'https://jsonplaceholder.typicode.com/users/{}'.format(USER_ID)
-        url = url + '/todos/'
-        resp = requests.get(url)
-
-        tasks = resp.json()
-        users_dict[USER_ID] = []
-        for task in tasks:
-            TASK_COMPLETED_STATUS = task.get('completed')
-            TASK_TITLE = task.get('title')
-            users_dict[USER_ID].append({
-                "task": TASK_TITLE,
-                "completed": TASK_COMPLETED_STATUS,
-                "username": USERNAME
-            })
-
-    with open('todo_all_employees.json', 'w') as f:
-        json.dump(users_dict, f)
+if __name__ == "__main__":
+    url = "https://jsonplaceholder.typicode.com/"
+    users = requests.get("{}users".format(url)).json()
+    userj = {}
+    for user in users:
+        userId = user.get("id")
+        username = user.get("username")
+        todos = requests.get("{}users/{}/todos".format(url, userId)).json()
+        t = [{"username": username,
+              "task": t.get("title"),
+              "completed": t.get("completed"),
+              } for t in todos]
+        userj[userId] = t
+    with open("todo_all_employees.json", 'w') as filejs:
+        json.dump(userj, filejs)
