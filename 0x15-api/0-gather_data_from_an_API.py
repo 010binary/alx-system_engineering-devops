@@ -2,28 +2,41 @@
 """Accessing a REST API for todo lists of employees using 
 urllib or requests module"""
 
-import re
 import requests
 import sys
 
-REST_API = "https://jsonplaceholder.typicode.com"
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if re.fullmatch(r'\d+', sys.argv[1]):
-            id = int(sys.argv[1])
-            req = requests.get('{}/users/{}'.format(REST_API, id)).json()
-            task_req = requests.get('{}/todos'.format(REST_API)).json()
-            emp_name = req.get('name')
-            tasks = list(filter(lambda x: x.get('userId') == id, task_req))
-            completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
-            print(
-                'Employee {} is done with tasks({}/{}):'.format(
-                    emp_name,
-                    len(completed_tasks),
-                    len(tasks)
-                )
-            )
-            if len(completed_tasks) > 0:
-                for task in completed_tasks:
-                    print('\t {}'.format(task.get('title')))
+def main():
+    """Accessing a REST API for todo lists of employees using 
+    urllib or requests module"""
+    
+    complete = 0
+    total = 0
+    args = int(sys.argv[1])
+    userUrl = requests.get("https://jsonplaceholder.typicode.com/users")
+    todoUrl = requests.get("https://jsonplaceholder.typicode.com/todos")
+
+    userUrl.json()
+    for user in userUrl.json():
+        if user["id"] == args:
+            name = user["name"]
+
+    for todo in todoUrl.json():
+        if todo["userId"] == args:
+            if todo["completed"] is True:
+                complete += 1
+
+    for todo in todoUrl.json():
+        if todo["userId"] == args:
+            if todo["completed"] is True or todo["completed"] is False:
+                total += 1
+
+    print(f"Employee {name} is done with tasks({complete}/{total}):")
+    for todo in todoUrl.json():
+        if todo["userId"] == args:
+            if todo["completed"] is True:
+                print(f"\t{todo['title']}")
+
+
+if __name__ == "__main__":
+    main()
