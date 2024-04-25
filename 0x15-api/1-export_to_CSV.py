@@ -2,55 +2,35 @@
 """ Export api response to comma seperated value file (csv)"""
 import csv
 import requests
-import sys
+from sys import argv
 
 
 def main():
-    """
-    main function which is the first poioint of execution for running this
-    script to get the userName, ID, title
-    """
-    # - Variables to be used
-    complete = 0
-    total = 0
-    username = ''
-    args = int(sys.argv[1])
-    userUrl = requests.get("https://jsonplaceholder.typicode.com/users")
-    todoUrl = requests.get("https://jsonplaceholder.typicode.com/todos")
+    """return API data"""
+    users = requests.get("http://jsonplaceholder.typicode.com/users")
+    for user in users.json():
+        if user.get('id') == int(argv[1]):
+            USERNAME = (user.get('username'))
+            break
+    TASK_STATUS_TITLE = []
 
-    userUrl.json()
-    for user in userUrl.json():
-        if user["id"] == args:
-            name = user.get("name")
-            username = user.get("username")
+    todos = requests.get("http://jsonplaceholder.typicode.com/todos")
+    for task in todos.json():
+        if task.get('userId') == int(argv[1]):
+            TASK_STATUS_TITLE.append((task.get('completed'),
+                                      task.get('title')))
 
-    for todo in todoUrl.json():
-        if todo.get("userId") == args:
-            if todo.get("completed") is True:
-                complete += 1
-
-    for todo in todoUrl.json():
-        if todo.get("userId") == args:
-            if todo["completed"] is True or todo["completed"] is False:
-                total += 1
-
-    new_list = []
-    default = []
-
-    for todo in todoUrl.json():
-        if todo["userId"] == args:
-            new_list = [
-                todo["userId"],
-                username,
-                todo["completed"],
-                todo["title"]
-            ]
-            default.append(new_list)
-
-    filename = f"{args}.csv"
-    with open(filename, "w", newline="") as f:
-        csvwriter = csv.writer(f)
-        csvwriter.writerows(default)
+    """export to csv"""
+    filename = "{}.csv".format(argv[1])
+    with open(filename, "w") as csvfile:
+        fieldnames = ["USER_ID", "USERNAME",
+                      "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
+                                quoting=csv.QUOTE_ALL)
+        for task in TASK_STATUS_TITLE:
+            writer.writerow({"USER_ID": argv[1], "USERNAME": USERNAME,
+                             "TASK_COMPLETED_STATUS": task[0],
+                             "TASK_TITLE": task[1]})
 
 
 if __name__ == "__main__":
