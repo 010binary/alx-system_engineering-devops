@@ -2,14 +2,18 @@
 """
 recursive function that queries the Reddit API and returns a
 list containing the titles of all hot articles for a given subreddit
-If no results are found for the given subreddit, 
+If no results are found for the given subreddit
 the function should return None.
 """
 
 
 import requests
 
+
 def recurse(subreddit, hot_list=[], after=None):
+    """
+
+    """
     if after is None:
         url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
     else:
@@ -32,4 +36,4 @@ def recurse(subreddit, hot_list=[], after=None):
         else:
             return None
     else:
-        return None
+        return None/n
