@@ -9,9 +9,10 @@ the function should return None.
 
 import requests
 
+
 def recurse(subreddit, hot_list=[], after=None):
     """ recursive function that queries the Reddit API and returns a
-    list containing the titles of all hot articles for a given subr
+    list containing the titles of all hot articles for a given subreddit
 
     Args:
         subreddit (string): _description_
@@ -19,30 +20,7 @@ def recurse(subreddit, hot_list=[], after=None):
         after (int, optional): _description_. Defaults to None.
 
     Returns:
-        list: list containing the titles of all hot article
-    """
-    #!/usr/bin/python3
-"""
-recursive function that queries the Reddit API and returns a
-list containing the titles of all hot articles for a given subreddit
-If no results are found for the given subreddit
-the function should return None.
-"""
-
-
-import requests
-
-def recurse(subreddit, hot_list=[], after=None):
-    """ recursive function that queries the Reddit API and returns
-    list containing the titles of all hot articles for a subreddit
-
-    Args:
-        subreddit (string): _description_
-        hot_list (list, optional): _description_. Defaults to [].
-        after (int, optional): _description_. Defaults to None.
-
-    Returns:
-        list: list containing the titles of all hot articles
+        list: list containing the titles of all hot articles for a given subreddit
     """
     if after is None:
         url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
