@@ -21,21 +21,51 @@ def recurse(subreddit, hot_list=[], after=None):
     Returns:
         list: list containing the titles of all hot article
     """
-    global after
-    user_agent = {'User-Agent': 'api_advanced-project'}
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    parameters = {'after': after}
-    results = requests.get(url, params=parameters, headers=user_agent,
-                           allow_redirects=False)
+    #!/usr/bin/python3
+"""
+recursive function that queries the Reddit API and returns a
+list containing the titles of all hot articles for a given subreddit
+If no results are found for the given subreddit
+the function should return None.
+"""
 
-    if results.status_code == 200:
-        after_data = results.json().get("data").get("after")
-        if after_data is not None:
-            after = after_data
-            recurse(subreddit, hot_list)
-        all_titles = results.json().get("data").get("children")
-        for title_ in all_titles:
-            hot_list.append(title_.get("data").get("title"))
-        return hot_list
+
+import requests
+
+def recurse(subreddit, hot_list=[], after=None):
+    """ recursive function that queries the Reddit API and returns a
+    list containing the titles of all hot articles for a given subreddit
+
+    Args:
+        subreddit (string): _description_
+        hot_list (list, optional): _description_. Defaults to [].
+        after (int, optional): _description_. Defaults to None.
+
+    Returns:
+        list: list containing the titles of all hot articles for a given subreddit
+    """
+    
+    if after is None:
+        url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
     else:
-        return (None)
+        url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100&after={after}"
+        
+    headers = {'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        if 'data' in data and 'children' in data['data']:
+            posts = data['data']['children']
+            for post in posts:
+                hot_list.append(post['data']['title'])
+            after = data['data']['after']
+            if after is not None:
+                return recurse(subreddit, hot_list, after)
+            else:
+                return hot_list
+        else:
+            return None
+    else:
+        return None/n
