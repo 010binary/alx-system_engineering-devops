@@ -8,6 +8,7 @@ first 10 hot posts listed for a given subreddit.
 import requests
 
 def top_ten(subreddit):
+<<<<<<< HEAD
     #url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
     url = "https://www.reddit.com/r/programming/hot.json?limit=10"
     headers = {'User-Agent': 'Mozilla/5.0'}
@@ -15,6 +16,18 @@ def top_ten(subreddit):
     response = requests.get(url, headers=headers)
     print(response)
     print("Response status code:", response.status_code)
+=======
+    """first 10 hot posts listed for a given subreddit.
+
+    Args:
+        subreddit (string): subreddit
+    """
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=9"
+    headers = {'User-Agent': 'Mozilla/5.0'}
+
+    response = requests.get(url, headers=headers)
+
+>>>>>>> c372b53774599c4e697652a02abd4ec3fe5f39ec
     if response.status_code != 200:
         print("None")
         return
